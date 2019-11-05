@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TeamControllerTest {
+class TeamControllerTest {
 
     private static final String TEAM_GET_LIST_URL = "/api/teams";
     private static final String TEAM_GET_BY_ID_URL = "/api/teams/{id}";
@@ -63,7 +63,7 @@ public class TeamControllerTest {
 
     @Test
     @Transactional
-    public void addTeam() throws Exception {
+    void addTeam() throws Exception {
         // given
         String teamName = "Olympique Gymnaste Club Nice";
         String teamAcronym = "OGC";
@@ -72,15 +72,15 @@ public class TeamControllerTest {
         String playerName = "Youcef Atal";
         Position playerPosition = Position.RIGHT_FULLBACK;
 
-        NewPlayerDto newPlayerDto = new NewPlayerDto(playerName, playerPosition);
-        List<NewPlayerDto> newPlayers = Collections.singletonList(newPlayerDto);
+        NewPlayerDto youcefAtal = new NewPlayerDto(playerName, playerPosition);
+        List<NewPlayerDto> ogcNicePlayers = Collections.singletonList(youcefAtal);
 
-        NewTeamDto newTeamDto = new NewTeamDto(teamName, teamAcronym, newPlayers, teamBudget);
+        NewTeamDto ogcNice = new NewTeamDto(teamName, teamAcronym, ogcNicePlayers, teamBudget);
 
         // when
         MvcResult result = mvc.perform(post(TEAM_CREATE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(newTeamDto)))
+                .content(objectMapper.writeValueAsString(ogcNice)))
                 // then
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
@@ -105,7 +105,7 @@ public class TeamControllerTest {
 
     @Test
     @Transactional
-    public void getTeamByIdWhenTeamExistsShouldReturnTeamDtoAndHttpStatusOk() throws Exception {
+    void getTeamByIdWhenTeamExistsShouldReturnTeamDtoAndHttpStatusOk() throws Exception {
         // given
         String teamName = "Olympique Gymnaste Club Nice";
         String teamAcronym = "OGC";
@@ -114,17 +114,17 @@ public class TeamControllerTest {
         String playerName = "Youcef Atal";
         Position playerPosition = Position.RIGHT_FULLBACK;
 
-        Player player = new Player();
-        player.setName(playerName);
-        player.setPosition(playerPosition);
+        Player youcefAtal = new Player();
+        youcefAtal.setName(playerName);
+        youcefAtal.setPosition(playerPosition);
 
-        Team team = new Team();
-        team.setName(teamName);
-        team.setAcronym(teamAcronym);
-        team.setBudget(teamBudget);
-        team.setPlayers(Collections.singletonList(player));
+        Team ogcNice = new Team();
+        ogcNice.setName(teamName);
+        ogcNice.setAcronym(teamAcronym);
+        ogcNice.setBudget(teamBudget);
+        ogcNice.setPlayers(Collections.singletonList(youcefAtal));
 
-        Team savedEntity = teamRepository.save(team);
+        Team savedEntity = teamRepository.save(ogcNice);
         Long id = savedEntity.getId();
 
         // when
@@ -149,7 +149,31 @@ public class TeamControllerTest {
     }
 
     @Test
-    public void getTeamByIdWhenTeamDoesntExistShouldReturnHttpStatusNotFound() throws Exception {
+    @Transactional
+    void addTeamWhenNewTeamDtoWithMissingValueShouldReturnHttpStatusBadRequest() throws Exception {
+        // given
+        String teamName = "Olympique Gymnaste Club Nice";
+        Long teamBudget = 182005000L;
+
+        String playerName = "Youcef Atal";
+        Position playerPosition = Position.RIGHT_FULLBACK;
+
+        NewPlayerDto youcefAtal = new NewPlayerDto(playerName, playerPosition);
+        List<NewPlayerDto> ogcNicePlayers = Collections.singletonList(youcefAtal);
+
+        NewTeamDto ogcNice = new NewTeamDto(teamName, null, ogcNicePlayers, teamBudget);
+
+        // when
+        mvc.perform(post(TEAM_CREATE_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ogcNice)))
+                // then
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void getTeamByIdWhenTeamDoesntExistShouldReturnHttpStatusNotFound() throws Exception {
         // given
         Long id = 99L;
 
@@ -162,7 +186,7 @@ public class TeamControllerTest {
 
     @Test
     @Transactional
-    public void getTeamListWithDefaultInputShouldReturnUnsortedItems() throws Exception {
+    void getTeamListWithDefaultInputShouldReturnUnsortedItems() throws Exception {
         // given
         Player youcefAtal = new Player();
         youcefAtal.setName("Youcef Atal");
@@ -219,7 +243,7 @@ public class TeamControllerTest {
 
     @Test
     @Transactional
-    public void getTeamListWithCustomInputShouldReturnItemsSortedByBudgetAsc() throws Exception {
+    void getTeamListWithCustomInputShouldReturnItemsSortedByBudgetAsc() throws Exception {
         // given
         Player youcefAtal = new Player();
         youcefAtal.setName("Youcef Atal");
@@ -230,7 +254,7 @@ public class TeamControllerTest {
         ogcNice.setAcronym("OGC");
         ogcNice.setBudget(1000000L);
         ogcNice.setPlayers(Collections.singletonList(youcefAtal));
-        
+
         Player neymar = new Player();
         neymar.setName("Neymar");
         neymar.setPosition(Position.LEFT_MIDFIELDER);

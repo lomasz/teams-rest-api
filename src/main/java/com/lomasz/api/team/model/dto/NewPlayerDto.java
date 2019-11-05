@@ -5,11 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @ToString
 public class NewPlayerDto {
 
+    @Size(max = 255)
     private String name;
 
     private Position position;

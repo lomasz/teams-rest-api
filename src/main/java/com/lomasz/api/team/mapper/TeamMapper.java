@@ -4,6 +4,7 @@ import com.lomasz.api.team.model.dto.NewTeamDto;
 import com.lomasz.api.team.model.dto.TeamDto;
 import com.lomasz.api.team.model.entity.Team;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = PlayerMapper.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TeamMapper {
 
+    @Mapping(target = "id", ignore = true)
     Team toEntity(NewTeamDto dto);
 
     TeamDto toTeamDto(Team entity);

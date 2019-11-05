@@ -17,7 +17,6 @@ import java.util.List;
 
 /**
  * Main entity
- *
  * */
 @Data
 @Entity
@@ -35,10 +34,16 @@ public class Team implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
     private Long id;
 
+    /**
+     * Full name of the team
+     */
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 25, nullable = false)
+    /**
+     * Short indicator of the team
+     */
+    @Column(length = 5, nullable = false)
     private String acronym;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -46,7 +51,7 @@ public class Team implements Serializable {
     private List<Player> players;
 
     /**
-     * Budget is natural number (in EUR currency)
+     * Budget is positive natural number (in EUR currency)
      */
     @Column(nullable = false)
     private Long budget;

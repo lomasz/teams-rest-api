@@ -29,11 +29,11 @@ public class SwaggerConfig {
                 .build();
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
                 .select()
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .ignoredParameterTypes(Pageable.class, PagedResourcesAssembler.class)
+                .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo);
     }
 

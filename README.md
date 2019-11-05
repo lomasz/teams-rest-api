@@ -25,7 +25,7 @@ Player: [id, name, position]
 docker-compose up
 ```
 
-#### running locally
+#### using gradle wrapper
 ```
 ./gradlew clean bootRun
 ```
@@ -39,19 +39,19 @@ http://localhost:8080/swagger-ui.html
 
 ### by curl
 
-###### POST /api/teams
+###### [POST] /api/teams
 ```
 curl -X POST "http://localhost:8080/api/teams" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"name\": \"Olympique Gymnaste Club Nice\", \"acronym\": \"OGC\", \"budget\": 182005000, \"players\": [ { \"name\": \"Youcef Atal\", \"position\": \"RIGHT_FULLBACK\" } ]}"
 ```
 
-###### GET /api/teams
+###### [GET] /api/teams
 ```
 curl -X GET "http://localhost:8080/api/teams
-curl -X GET "http://localhost:8080/api/teams?page=0&size=20"
+curl -X GET "http://localhost:8080/api/teams?page=0&size=5"
 curl -X GET "http://localhost:8080/api/teams?page=1&size=2&sort=budget,asc"
 ```
 
-###### GET /api/teams/{id}
+###### [GET] /api/teams/{id}
 ```
 curl -X GET "http://localhost:8080/api/teams/1"
 ```
