@@ -159,9 +159,14 @@ class TeamServiceTest {
         long totalElements = 1L;
         int totalPages = 1;
 
+        Pageable pageable = mock(Pageable.class);
+        when(pageable.getPageSize()).thenReturn(limit);
+        when(pageable.getPageNumber()).thenReturn(page);
+
         Page teamsPage = mock(Page.class);
         when(teamsPage.getTotalPages()).thenReturn(totalPages);
         when(teamsPage.getTotalElements()).thenReturn(totalElements);
+        when(teamsPage.getPageable()).thenReturn(pageable);
         when(teamsPage.getContent()).thenReturn(entityList);
 
         when(teamRepository.findAll(any(Pageable.class))).thenReturn(teamsPage);

@@ -29,23 +29,31 @@ public class TeamService {
     }
 
     public SearchResult<TeamDto> getTeamList(Pageable pageable) {
-
+        log.info("Getting list of teams from database for input: " + pageable);
         Page<Team> teamPage = teamRepository.findAll(pageable);
+        log.info("Output:"
+                + " pageable = " + teamPage.getPageable()
+                + ", items = " + teamPage.getContent()
+                + ", limit = " + teamPage.getPageable().getPageSize()
+                + ", page = " + teamPage.getPageable().getPageNumber()
+                + ", pages = " + teamPage.getTotalPages()
+                + ", total count = " + teamPage.getTotalElements()
+        );
         List<TeamDto> items = teamMapper.toTeamDtoList(teamPage.getContent());
 
         return SearchResult.<TeamDto>builder()
                 .items(items)
-                .limit(pageable.getPageSize())
-                .page(pageable.getPageNumber())
+                .limit(teamPage.getPageable().getPageSize())
+                .page(teamPage.getPageable().getPageNumber())
                 .pages(teamPage.getTotalPages())
                 .totalCount(teamPage.getTotalElements())
                 .build();
     }
 
     public Long createTeam(NewTeamDto teamDto) {
-        log.info("Saving new team started: " + teamDto);
+        log.info("Saving new team: " + teamDto);
         Team savedEntity = teamRepository.save(teamMapper.toEntity(teamDto));
-        log.info("New team saved: " + savedEntity);
+        log.info("New team saved in database successfully: " + savedEntity);
         return savedEntity.getId();
     }
 

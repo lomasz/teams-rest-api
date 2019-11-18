@@ -10,7 +10,7 @@ Technical environment:
 - Hibernate
 - Database: H2 (Embedded)
 
-### Example of data model:
+## Example of data model
 ```
 Team:   [id, name, acronym, players, budget]
 Player: [id, name, position]
@@ -18,11 +18,19 @@ Player: [id, name, position]
 
 ---
 
-### How to run
+## How to run
 #### using docker-compose
+**REQUIRED: Docker running**
+
+###### Starting
 ```
 ./gradlew clean build
-docker-compose up
+docker-compose up --build -d
+```
+
+###### Closing
+```
+docker-compose down --remove-orphans
 ```
 
 #### using gradle wrapper
@@ -30,28 +38,26 @@ docker-compose up
 ./gradlew clean bootRun
 ```
 
-### How to use endpoints
+## How to use endpoints
 
 ### by swagger
-```
-http://localhost:8080/swagger-ui.html
-```
-
+* `http://localhost:4326/v2/api-docs` - API Docs [JSON]
+* `http://localhost:4326/swagger-ui.html` - Swagger UI
 ### by curl
 
 ###### [POST] /api/teams
 ```
-curl -X POST "http://localhost:8080/api/teams" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"name\": \"Olympique Gymnaste Club Nice\", \"acronym\": \"OGC\", \"budget\": 182005000, \"players\": [ { \"name\": \"Youcef Atal\", \"position\": \"RIGHT_FULLBACK\" } ]}"
+curl -X POST "http://localhost:4326/api/teams" -H "accept: */*" -H "Content-Type: application/json" -d "{ \"name\": \"Olympique Gymnaste Club Nice\", \"acronym\": \"OGC\", \"budget\": 182005000, \"players\": [ { \"name\": \"Youcef Atal\", \"position\": \"RIGHT_FULLBACK\" } ]}"
 ```
 
 ###### [GET] /api/teams
 ```
-curl -X GET "http://localhost:8080/api/teams
-curl -X GET "http://localhost:8080/api/teams?page=0&size=5"
-curl -X GET "http://localhost:8080/api/teams?page=1&size=2&sort=budget,asc"
+curl -X GET "http://localhost:4326/api/teams
+curl -X GET "http://localhost:4326/api/teams?page=0&size=5"
+curl -X GET "http://localhost:4326/api/teams?page=1&size=2&sort=budget,asc"
 ```
 
 ###### [GET] /api/teams/{id}
 ```
-curl -X GET "http://localhost:8080/api/teams/1"
+curl -X GET "http://localhost:4326/api/teams/1"
 ```
